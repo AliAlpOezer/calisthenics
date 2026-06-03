@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Upper Body Calisthenics — 4-Week Program</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --card: #1d1d1d;
+    --border: #2a2a2a;
+    --accent: #e8ff3c;
+    --accent2: #ff4d4d;
+    --text: #f0f0f0;
+    --muted: #888;
+    --push: #ff6b35;
+    --pull: #4ecdc4;
+    --core: #a78bfa;
+    --skill: #fbbf24;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    padding: 60px 32px 40px;
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  header::after {
+    content: 'UPPER';
+    position: absolute;
+    right: -10px;
+    top: -20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 180px;
+    color: var(--accent);
+    opacity: 0.05;
+    letter-spacing: -4px;
+    pointer-events: none;
+    user-select: none;
+  }
+  .header-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #000;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    margin-bottom: 16px;
+  }
+  header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 8vw, 88px);
+    line-height: 0.95;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+  header h1 span { color: var(--accent); }
+  .header-sub {
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 14px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .header-sub span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .header-sub span::before {
+    content: '●';
+    color: var(--accent);
+    font-size: 8px;
+  }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    gap: 12px;
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+  .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* WEEK TABS */
+  .week-tabs {
+    display: flex;
+    gap: 0;
+    padding: 0 32px;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .tab {
+    padding: 16px 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    background: none;
+    border-top: none; border-left: none; border-right: none;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
+
+  /* MAIN CONTENT */
+  main {
+    padding: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .week-panel { display: none; }
+  .week-panel.active { display: block; }
+
+  .week-header {
+    margin-bottom: 24px;
+  }
+  .week-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 1px;
+    color: var(--text);
+  }
+  .week-header p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 4px;
+  }
+
+  /* DAYS GRID */
+  .days-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+  }
+
+  .day-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .day-card:hover { border-color: #3a3a3a; }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .day-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+  }
+  .day-focus {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .focus-push { background: rgba(255,107,53,0.15); color: var(--push); }
+  .focus-pull { background: rgba(78,205,196,0.15); color: var(--pull); }
+  .focus-full { background: rgba(167,139,250,0.15); color: var(--core); }
+  .focus-skill { background: rgba(251,191,36,0.15); color: var(--skill); }
+  .focus-rest { background: rgba(136,136,136,0.1); color: var(--muted); }
+
+  .day-meta {
+    padding: 10px 18px;
+    display: flex;
+    gap: 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .day-meta span { display: flex; align-items: center; gap: 5px; }
+
+  /* REST DAY */
+  .rest-day { padding: 28px 18px; color: var(--muted); font-size: 13px; }
+
+  /* SECTION */
+  .section {
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section:last-child { border-bottom: none; }
+  .section-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  /* EXERCISE ROW */
+  .ex-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    gap: 8px;
+  }
+  .ex-row:last-child { border-bottom: none; }
+  .ex-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+  }
+  .ex-type {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+  .ex-name {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .ex-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .ex-sets {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  /* TIPS */
+  .tip-box {
+    background: rgba(232,255,60,0.04);
+    border-left: 2px solid var(--accent);
+    padding: 10px 14px;
+    margin: 16px 0 0;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+    border-radius: 0 2px 2px 0;
+  }
+  .tip-box strong { color: var(--accent); font-weight: 600; }
+
+  /* PAIR BADGE */
+  .pair-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    background: rgba(78,205,196,0.05);
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--pull);
+  }
+
+  /* TIMER BLOCK */
+  .timer-block {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 0 0 4px;
+  }
+  .timer-pill {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* PROGRESS TRACKER */
+  .progress-section {
+    margin-top: 40px;
+    padding: 28px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+  }
+  .progress-section h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .progress-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .progress-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 14px;
+    border-radius: 2px;
+  }
+  .progress-item label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .progress-item input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 4px 0;
+    outline: none;
+  }
+  .progress-item input:focus { border-bottom-color: var(--accent); }
+  .progress-item input::placeholder { color: var(--border); }
+
+  /* CHECKLIST */
+  .check-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    font-size: 12px;
+    color: var(--muted);
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .check-item:hover { border-color: var(--accent); color: var(--text); }
+  .check-item.done { background: rgba(232,255,60,0.08); border-color: var(--accent); color: var(--accent); }
+  .check-item input[type=checkbox] { display: none; }
+  .check-box {
+    width: 14px; height: 14px;
+    border: 1.5px solid currentColor;
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 9px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    header { padding: 40px 20px 28px; }
+    .legend, .week-tabs, main { padding-left: 20px; padding-right: 20px; }
+    .days-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ANIMATE IN */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .day-card { animation: fadeUp 0.35s ease both; }
+  .day-card:nth-child(1) { animation-delay: 0.05s; }
+  .day-card:nth-child(2) { animation-delay: 0.10s; }
+  .day-card:nth-child(3) { animation-delay: 0.15s; }
+  .day-card:nth-child(4) { animation-delay: 0.20s; }
+
+  /* GIF MODAL */
+  .ex-name { cursor: pointer; position: relative; }
+  .ex-name:hover { color: var(--accent); transition: color 0.15s; }
+  .ex-name::after {
+    content: '▶';
+    font-size: 9px;
+    margin-left: 6px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    color: var(--accent);
+    vertical-align: middle;
+  }
+  .ex-name:hover::after { opacity: 0.6; }
+
+  .gif-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .gif-modal.active { display: flex; opacity: 1; }
+  .gif-modal-content {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px;
+    max-width: 420px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    transform: translateY(20px) scale(0.96);
+    transition: transform 0.3s cubic-bezier(0.22,1,0.36,1);
+  }
+  .gif-modal.active .gif-modal-content {
+    transform: translateY(0) scale(1);
+  }
+  .gif-modal img {
+    width: 100%;
+    border-radius: 2px;
+    display: block;
+    background: #000;
+  }
+  .gif-caption {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+  .gif-close {
+    position: absolute;
+    top: -36px;
+    right: 0;
+    color: var(--text);
+    font-size: 28px;
+    cursor: pointer;
+    line-height: 1;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  .gif-close:hover { opacity: 1; }
+  .gif-hint {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 6px;
+  }
+  .gif-error {
+    font-size: 12px;
+    color: var(--accent2);
+    text-align: center;
+    padding: 20px;
+  }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">4-Week Program · For Two</div>
+  <h1>Upper Body<br><span>Calisthenics</span></h1>
+  <div class="header-sub">
+    <span>60 min / session</span>
+    <span>No equipment (pull-up bar optional)</span>
+    <span>No legs</span>
+    <span>Push · Pull · Core · Skill</span>
+  </div>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><div class="dot" style="background:var(--push)"></div> Push</div>
+  <div class="legend-item"><div class="dot" style="background:var(--pull)"></div> Pull</div>
+  <div class="legend-item"><div class="dot" style="background:var(--core)"></div> Core / Abs</div>
+  <div class="legend-item"><div class="dot" style="background:var(--skill)"></div> Skill / Isometric</div>
+</div>
+
+<div class="week-tabs">
+  <button class="tab active" onclick="switchTab(0)">TODAY</button>
+  <button class="tab" onclick="switchTab(1)">WEEK 1</button>
+  <button class="tab" onclick="switchTab(2)">WEEK 2</button>
+  <button class="tab" onclick="switchTab(3)">WEEK 3–4</button>
+  <button class="tab" onclick="switchTab(4)">TRACK</button>
+</div>
+
+<main>
+
+<!-- ══════════════════════════════ TODAY ══════════════════════════════ -->
+<div class="week-panel active" id="panel-0">
+  <div class="week-header">
+    <h2>Today's Session — Push &amp; Core</h2>
+    <p>Great starting session for two. Alternate reps with your partner to keep rest natural.</p>
+  </div>
+  <div class="days-grid">
+    <div class="day-card" style="grid-column: 1 / -1">
+      <div class="day-header">
+        <span class="day-name">WARM-UP — 8 min</span>
+        <span class="day-focus focus-rest">Required</span>
+      </div>
+      <div class="section">
+        <div class="timer-block">
+          <span class="timer-pill">30s Arm circles (fwd + back)</span>
+          <span class="timer-pill">30s Shoulder rolls</span>
+          <span class="timer-pill">30s Wrist circles</span>
+          <span class="timer-pill">30s Band pull-aparts or towel stretch</span>
+          <span class="timer-pill">10 Scapular push-ups</span>
+          <span class="timer-pill">10 Dead hangs or doorframe stretch</span>
+          <span class="timer-pill">10 Pike push-up → downward dog flow</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header">
+        <span class="day-name">BLOCK A — Push</span>
+        <span class="day-focus focus-push">Chest · Triceps</span>
+      </div>
+      <div class="day-meta">
+        <span>⏱ ~18 min</span>
+        <span>Rest 60–90s between sets</span>
+      </div>
+      <div class="pair-note">👥 Partner alternates — one works while one rests</div>
+      <div class="section">
+        <div class="section-title">Main</div>
+        <div class="ex-row">
+          <div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Wide Push-ups</div><div class="ex-note">Full ROM, chest to floor</div></div></div>
+          <div class="ex-sets">4 × 12</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Diamond Push-ups</div><div class="ex-note">Elbows close, elbows forward</div></div></div>
+          <div class="ex-sets">3 × 10</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Pike Push-ups</div><div class="ex-note">Hips high, forehead to floor</div></div></div>
+          <div class="ex-sets">3 × 8</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Archer Push-ups</div><div class="ex-note">One arm extended, control the shift</div></div></div>
+          <div class="ex-sets">3 × 6/side</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header">
+        <span class="day-name">BLOCK B — Pull</span>
+        <span class="day-focus focus-pull">Back · Biceps</span>
+      </div>
+      <div class="day-meta">
+        <span>⏱ ~15 min</span>
+        <span>Rest 60s between sets</span>
+      </div>
+      <div class="section">
+        <div class="section-title">With Pull-up Bar</div>
+        <div class="ex-row">
+          <div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Pull-ups (overhand)</div><div class="ex-note">Dead hang start, full extension</div></div></div>
+          <div class="ex-sets">4 × max</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Chin-ups (underhand)</div><div class="ex-note">Bicep emphasis, slow descent</div></div></div>
+          <div class="ex-sets">3 × max</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Scapular Rows (bar low)</div><div class="ex-note">Or use a table edge / low bar</div></div></div>
+          <div class="ex-sets">3 × 12</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-title">No Bar Alternative</div>
+        <div class="ex-row">
+          <div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Inverted Rows (table)</div><div class="ex-note">Chest to table edge, body straight</div></div></div>
+          <div class="ex-sets">4 × 12</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Partner Towel Rows</div><div class="ex-note">Sit facing partner, pull alternately</div></div></div>
+          <div class="ex-sets">3 × 10</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header">
+        <span class="day-name">BLOCK C — Core</span>
+        <span class="day-focus focus-full">Abs · Anti-rotation</span>
+      </div>
+      <div class="day-meta">
+        <span>⏱ ~12 min</span>
+        <span>30s rest between exercises</span>
+      </div>
+      <div class="section">
+        <div class="ex-row">
+          <div class="ex-left"><div class="ex-type" style="background:var(--core)"></div><div><div class="ex-name">Hollow Body Hold</div><div class="ex-note">Arms overhead, lower back flat</div></div></div>
+          <div class="ex-sets">3 × 30s</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-left"><div class="ex-type" style="background:var(--core)"></div><div><div class="ex-name">L-Sit (between chairs)</div><div class="ex-note">Or tuck L-sit if needed</div></div></div>
+          <div class="ex-sets">3 × 15s</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-left"><div class="ex-type" style="background:var(--core)"></div><div><div class="ex-name">Dragon Flags (negatives)</div><div class="ex-note">Bench or floor, lower slowly 5s</div></div></div>
+          <div class="ex-sets">3 × 5</div>
+        </div>
+        <div class="ex-row">
+          <div class="ex-left"><div class="ex-type" style="background:var(--core)"></div><div><div class="ex-name">Partner Leg Throws</div><div class="ex-note">One lies down, partner throws legs</div></div></div>
+          <div class="ex-sets">3 × 10</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header">
+        <span class="day-name">COOL-DOWN — 7 min</span>
+        <span class="day-focus focus-rest">Mobility</span>
+      </div>
+      <div class="section">
+        <div class="timer-block">
+          <span class="timer-pill">60s Chest doorframe stretch</span>
+          <span class="timer-pill">60s Lat hang stretch</span>
+          <span class="timer-pill">60s Cross-body shoulder stretch</span>
+          <span class="timer-pill">60s Child's pose with lat reach</span>
+          <span class="timer-pill">60s Wrist flexor + extensor stretch</span>
+          <span class="timer-pill">60s Passive hang</span>
+        </div>
+      </div>
+      <div class="tip-box"><strong>Tip:</strong> Hold each stretch for 45–60s. Breathe slowly. Your partner can add gentle pressure on the cross-body stretch.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ WEEK 1 ══════════════════════════════ -->
+<div class="week-panel" id="panel-1">
+  <div class="week-header">
+    <h2>Week 1 — Build Foundation</h2>
+    <p>Establish movement patterns. Focus on form over rep count. 4 training days, 3 rest.</p>
+  </div>
+  <div class="days-grid">
+
+    <!-- Monday -->
+    <div class="day-card">
+      <div class="day-header"><span class="day-name">Monday</span><span class="day-focus focus-push">Push Day</span></div>
+      <div class="day-meta"><span>⏱ 60 min</span><span>Chest · Shoulders · Triceps</span></div>
+      <div class="section">
+        <div class="section-title">Warm-up (8 min)</div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--muted)"></div><div><div class="ex-name">Arm swings + wrist prep + scapular push-ups</div></div></div><div class="ex-sets">8 min</div></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Main (42 min)</div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Standard Push-ups</div><div class="ex-note">Chest to floor, 2s down</div></div></div><div class="ex-sets">4 × 15</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Wide Push-ups</div></div></div><div class="ex-sets">3 × 12</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Pike Push-ups</div><div class="ex-note">Shoulder press pattern</div></div></div><div class="ex-sets">4 × 10</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Diamond Push-ups</div></div></div><div class="ex-sets">3 × 10</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Dips (between chairs)</div><div class="ex-note">Lean slightly forward</div></div></div><div class="ex-sets">3 × 10</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--core)"></div><div><div class="ex-name">Hollow Body Hold</div></div></div><div class="ex-sets">3 × 30s</div></div>
+      </div>
+      <div class="section"><div class="section-title">Cool-down (10 min)</div><div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--muted)"></div><div><div class="ex-name">Chest + shoulder stretches</div></div></div><div class="ex-sets">10 min</div></div></div>
+    </div>
+
+    <!-- Tuesday -->
+    <div class="day-card">
+      <div class="day-header"><span class="day-name">Tuesday</span><span class="day-focus focus-pull">Pull Day</span></div>
+      <div class="day-meta"><span>⏱ 60 min</span><span>Back · Biceps · Rear Delts</span></div>
+      <div class="section">
+        <div class="section-title">Warm-up (8 min)</div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--muted)"></div><div><div class="ex-name">Dead hangs + band pull-aparts + shoulder CARs</div></div></div><div class="ex-sets">8 min</div></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Main (42 min)</div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Pull-ups</div><div class="ex-note">Max reps, quality over speed</div></div></div><div class="ex-sets">5 × max</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Chin-ups</div></div></div><div class="ex-sets">3 × max</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Inverted Rows</div><div class="ex-note">Table edge, body at 45°</div></div></div><div class="ex-sets">4 × 12</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Face Pulls (towel around post)</div></div></div><div class="ex-sets">3 × 15</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--core)"></div><div><div class="ex-name">Dead Bug</div><div class="ex-note">Opposite arm/leg, back flat</div></div></div><div class="ex-sets">3 × 10/side</div></div>
+      </div>
+      <div class="section"><div class="section-title">Cool-down (10 min)</div><div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--muted)"></div><div><div class="ex-name">Lat + bicep stretches, passive hang</div></div></div><div class="ex-sets">10 min</div></div></div>
+    </div>
+
+    <!-- Wednesday -->
+    <div class="day-card">
+      <div class="day-header"><span class="day-name">Wednesday</span><span class="day-focus focus-rest">Rest / Mobility</span></div>
+      <div class="rest-day">
+        <p>Active recovery. 20–30 min light walking or mobility work.</p>
+        <div class="tip-box" style="margin-top:12px"><strong>Do:</strong> Thoracic rotations, wrist mobility, dead hangs (no pull effort), foam roll lats and chest.</div>
+      </div>
+    </div>
+
+    <!-- Thursday -->
+    <div class="day-card">
+      <div class="day-header"><span class="day-name">Thursday</span><span class="day-focus focus-full">Full Upper</span></div>
+      <div class="day-meta"><span>⏱ 60 min</span><span>Balanced push + pull + core</span></div>
+      <div class="section">
+        <div class="section-title">Superset A (push + pull, 3 rounds)</div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Push-ups</div></div></div><div class="ex-sets">3 × 15</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Inverted Rows</div></div></div><div class="ex-sets">3 × 12</div></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Superset B (3 rounds)</div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Dips</div></div></div><div class="ex-sets">3 × 10</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Pull-ups (or negatives)</div></div></div><div class="ex-sets">3 × 6</div></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Core Finisher</div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--core)"></div><div><div class="ex-name">Hollow Body → Arch Rock</div></div></div><div class="ex-sets">3 × 20</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--core)"></div><div><div class="ex-name">L-Sit Hold</div></div></div><div class="ex-sets">3 × 15s</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--core)"></div><div><div class="ex-name">Plank Shoulder Taps</div></div></div><div class="ex-sets">3 × 20</div></div>
+      </div>
+    </div>
+
+    <!-- Friday -->
+    <div class="day-card">
+      <div class="day-header"><span class="day-name">Friday</span><span class="day-focus focus-skill">Skill &amp; Strength</span></div>
+      <div class="day-meta"><span>⏱ 60 min</span><span>Handstand · Planche · Muscle-up prep</span></div>
+      <div class="section">
+        <div class="section-title">Handstand Work (20 min)</div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--skill)"></div><div><div class="ex-name">Wall Handstand Hold</div><div class="ex-note">Chest to wall, tight hollow body</div></div></div><div class="ex-sets">5 × 30s</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--skill)"></div><div><div class="ex-name">Kick-up Practice</div><div class="ex-note">Freestanding attempts</div></div></div><div class="ex-sets">10 min</div></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Planche Progressions (15 min)</div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--skill)"></div><div><div class="ex-name">Planche Lean</div><div class="ex-note">Protract scapulae, lean forward</div></div></div><div class="ex-sets">5 × 20s</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--skill)"></div><div><div class="ex-name">Tuck Planche Hold</div><div class="ex-note">Knees to chest, elevated</div></div></div><div class="ex-sets">3 × 10s</div></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Muscle-up Prep (15 min)</div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Explosive Pull-ups</div><div class="ex-note">Pull chest to bar</div></div></div><div class="ex-sets">4 × 5</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Bar Dips (if available)</div></div></div><div class="ex-sets">4 × 8</div></div>
+      </div>
+    </div>
+
+    <!-- Weekend -->
+    <div class="day-card">
+      <div class="day-header"><span class="day-name">Sat / Sun</span><span class="day-focus focus-rest">Rest &amp; Recover</span></div>
+      <div class="rest-day">
+        <p>Full rest. Optional: 20-min mobility flow focusing on shoulder health and thoracic mobility.</p>
+        <div class="tip-box" style="margin-top:12px"><strong>Recovery essentials:</strong> 7–8h sleep, protein intake ~1.6–2g/kg bodyweight, hydration.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════ WEEK 2 ══════════════════════════════ -->
+<div class="week-panel" id="panel-2">
+  <div class="week-header">
+    <h2>Week 2 — Volume &amp; Intensity Up</h2>
+    <p>Add one set to main exercises. Reduce rest by 15s. Introduce harder push progressions.</p>
+  </div>
+  <div class="days-grid">
+
+    <div class="day-card">
+      <div class="day-header"><span class="day-name">Monday</span><span class="day-focus focus-push">Push — Harder</span></div>
+      <div class="section">
+        <div class="section-title">Key Changes from Week 1</div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Archer Push-ups</div><div class="ex-note">Replace standard push-ups</div></div></div><div class="ex-sets">4 × 8/side</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Deficit Push-ups</div><div class="ex-note">Hands on books / plates</div></div></div><div class="ex-sets">4 × 10</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Pseudo Planche Push-ups</div><div class="ex-note">Hands by hips, lean forward</div></div></div><div class="ex-sets">3 × 8</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Pike Push-ups (elevated feet)</div></div></div><div class="ex-sets">4 × 10</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Ring Dips / Chair Dips</div></div></div><div class="ex-sets">4 × 10</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--core)"></div><div><div class="ex-name">Dragon Flag Negatives</div></div></div><div class="ex-sets">4 × 5</div></div>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header"><span class="day-name">Tuesday</span><span class="day-focus focus-pull">Pull — Volume</span></div>
+      <div class="section">
+        <div class="section-title">Total Pull Volume ×1.2 vs Week 1</div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Pull-ups (weighted if easy)</div><div class="ex-note">Backpack with books</div></div></div><div class="ex-sets">5 × 8</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">L-Sit Pull-ups</div><div class="ex-note">Or tuck L hold while pulling</div></div></div><div class="ex-sets">3 × 5</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Narrow Grip Chin-ups</div></div></div><div class="ex-sets">3 × 8</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Inverted Rows (feet elevated)</div></div></div><div class="ex-sets">4 × 12</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--core)"></div><div><div class="ex-name">Hanging Knee Raises</div></div></div><div class="ex-sets">3 × 15</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--core)"></div><div><div class="ex-name">Hanging Windshield Wipers</div></div></div><div class="ex-sets">3 × 10</div></div>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header"><span class="day-name">Thursday</span><span class="day-focus focus-full">AMRAP Circuit</span></div>
+      <div class="section">
+        <div class="section-title">5 Rounds — AMRAP format</div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Push-ups</div></div></div><div class="ex-sets">Max in 45s</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Inverted Rows</div></div></div><div class="ex-sets">Max in 45s</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--core)"></div><div><div class="ex-name">Hollow Body</div></div></div><div class="ex-sets">45s hold</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Dips</div></div></div><div class="ex-sets">Max in 45s</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--core)"></div><div><div class="ex-name">Rest</div></div></div><div class="ex-sets">90s</div></div>
+      </div>
+      <div class="tip-box"><strong>Log your reps</strong> each round — try to maintain equal or higher reps across all 5 rounds.</div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header"><span class="day-name">Friday</span><span class="day-focus focus-skill">Skill + Strength</span></div>
+      <div class="section">
+        <div class="section-title">Handstand (20 min — freestanding focus)</div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--skill)"></div><div><div class="ex-name">Freestanding kick-ups</div><div class="ex-note">3–5s hold attempts</div></div></div><div class="ex-sets">15 min</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--skill)"></div><div><div class="ex-name">Wall handstand (back to wall)</div></div></div><div class="ex-sets">5 × 45s</div></div>
+      </div>
+      <div class="section">
+        <div class="section-title">Front Lever Intro (20 min)</div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--skill)"></div><div><div class="ex-name">Tuck Front Lever</div></div></div><div class="ex-sets">5 × 15s</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--skill)"></div><div><div class="ex-name">Tuck Front Lever Rows</div></div></div><div class="ex-sets">3 × 8</div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════ WEEK 3-4 ══════════════════════════════ -->
+<div class="week-panel" id="panel-3">
+  <div class="week-header">
+    <h2>Weeks 3–4 — Strength &amp; Skill Consolidation</h2>
+    <p>Push progressions toward one-arm negatives, handstand push-ups, and muscle-up attempts.</p>
+  </div>
+  <div class="days-grid">
+
+    <div class="day-card">
+      <div class="day-header"><span class="day-name">Push Goal</span><span class="day-focus focus-push">Week 3–4 Targets</span></div>
+      <div class="section">
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Handstand Push-ups (wall)</div><div class="ex-note">Partial ROM → Full ROM progression</div></div></div><div class="ex-sets">4 × 5</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">One-arm Push-up Negatives</div><div class="ex-note">5s descent, other hand fingertip assist</div></div></div><div class="ex-sets">4 × 4/side</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Pseudo Planche Push-ups</div></div></div><div class="ex-sets">4 × 10</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Ring Push-ups / Deep Dips</div></div></div><div class="ex-sets">4 × 12</div></div>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header"><span class="day-name">Pull Goal</span><span class="day-focus focus-pull">Week 3–4 Targets</span></div>
+      <div class="section">
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Muscle-up Attempts</div><div class="ex-note">Kipping → strict progression</div></div></div><div class="ex-sets">10 attempts</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Weighted Pull-ups</div><div class="ex-note">+5–10kg backpack</div></div></div><div class="ex-sets">4 × 6</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">One-arm Negative Pull-up</div><div class="ex-note">Assisted with other hand on wrist</div></div></div><div class="ex-sets">3 × 3/side</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Typewriter Pull-ups</div><div class="ex-note">Shift laterally at top</div></div></div><div class="ex-sets">3 × 6</div></div>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header"><span class="day-name">Skill Goal</span><span class="day-focus focus-skill">Week 3–4 Targets</span></div>
+      <div class="section">
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--skill)"></div><div><div class="ex-name">Freestanding Handstand</div><div class="ex-note">Target: 10s hold</div></div></div><div class="ex-sets">Daily 15 min</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--skill)"></div><div><div class="ex-name">Advanced Tuck Planche</div><div class="ex-note">Hips above shoulders</div></div></div><div class="ex-sets">5 × 15s</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--skill)"></div><div><div class="ex-name">Front Lever (advanced tuck)</div></div></div><div class="ex-sets">5 × 10s</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--skill)"></div><div><div class="ex-name">Human Flag (intro)</div><div class="ex-note">Tuck position against pole</div></div></div><div class="ex-sets">3 × 8s</div></div>
+      </div>
+    </div>
+
+    <div class="day-card">
+      <div class="day-header"><span class="day-name">Partner Challenge</span><span class="day-focus focus-full">End of Month Test</span></div>
+      <div class="section">
+        <div class="section-title">Max Rep Test — Compete vs each other</div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Max Push-ups unbroken</div></div></div><div class="ex-sets">1 attempt</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--pull)"></div><div><div class="ex-name">Max Pull-ups unbroken</div></div></div><div class="ex-sets">1 attempt</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--skill)"></div><div><div class="ex-name">Max Handstand hold</div></div></div><div class="ex-sets">1 attempt</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--core)"></div><div><div class="ex-name">Max L-Sit hold</div></div></div><div class="ex-sets">1 attempt</div></div>
+        <div class="ex-row"><div class="ex-left"><div class="ex-type" style="background:var(--push)"></div><div><div class="ex-name">Max Dips unbroken</div></div></div><div class="ex-sets">1 attempt</div></div>
+      </div>
+      <div class="tip-box"><strong>Log both scores</strong> and compare to your Week 1 benchmarks in the Tracker tab!</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════ TRACKER ══════════════════════════════ -->
+<div class="week-panel" id="panel-4">
+  <div class="week-header">
+    <h2>Progress Tracker</h2>
+    <p>Log your max reps at the start and end of the program to see your gains.</p>
+  </div>
+
+  <div class="progress-section">
+    <h3>Personal Records — You</h3>
+    <div class="progress-grid">
+      <div class="progress-item"><label>Push-ups (max)</label><input type="number" placeholder="Week 1 →" /></div>
+      <div class="progress-item"><label>Pull-ups (max)</label><input type="number" placeholder="Week 1 →" /></div>
+      <div class="progress-item"><label>Dips (max)</label><input type="number" placeholder="Week 1 →" /></div>
+      <div class="progress-item"><label>L-Sit hold (sec)</label><input type="number" placeholder="Week 1 →" /></div>
+      <div class="progress-item"><label>Handstand hold (sec)</label><input type="number" placeholder="Week 1 →" /></div>
+      <div class="progress-item"><label>Muscle-ups</label><input type="number" placeholder="Week 1 →" /></div>
+    </div>
+  </div>
+
+  <div class="progress-section" style="margin-top:16px">
+    <h3>Personal Records — Partner</h3>
+    <div class="progress-grid">
+      <div class="progress-item"><label>Push-ups (max)</label><input type="number" placeholder="Week 1 →" /></div>
+      <div class="progress-item"><label>Pull-ups (max)</label><input type="number" placeholder="Week 1 →" /></div>
+      <div class="progress-item"><label>Dips (max)</label><input type="number" placeholder="Week 1 →" /></div>
+      <div class="progress-item"><label>L-Sit hold (sec)</label><input type="number" placeholder="Week 1 →" /></div>
+      <div class="progress-item"><label>Handstand hold (sec)</label><input type="number" placeholder="Week 1 →" /></div>
+      <div class="progress-item"><label>Muscle-ups</label><input type="number" placeholder="Week 1 →" /></div>
+    </div>
+  </div>
+
+  <div class="progress-section" style="margin-top:16px">
+    <h3>Sessions Completed</h3>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:4px">Tap to mark done</p>
+    <div class="check-grid" id="checkGrid"></div>
+  </div>
+</div>
+
+</main>
+
+
+<!-- EXERCISE GIF MODAL -->
+<div id="gifModal" class="gif-modal" onclick="closeGifModal(event)">
+  <div class="gif-modal-content" onclick="event.stopPropagation()">
+    <span class="gif-close" onclick="closeGifModal()">&times;</span>
+    <img id="gifImg" src="" alt="Exercise demo" onerror="this.style.display='none'; document.getElementById('gifError').style.display='block';" />
+    <div id="gifError" class="gif-error" style="display:none">Demo GIF not available for this exercise.</div>
+    <div id="gifCaption" class="gif-caption"></div>
+    <div class="gif-hint">Click outside or press ESC to close</div>
+  </div>
+</div>
+
+<script>
+  // TAB SWITCHING
+  function switchTab(idx) {
+    document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i === idx));
+    document.querySelectorAll('.week-panel').forEach((p,i) => p.classList.toggle('active', i === idx));
+  }
+
+  // SESSION CHECKBOXES
+  const sessions = [
+    'Mon W1','Tue W1','Thu W1','Fri W1',
+    'Mon W2','Tue W2','Thu W2','Fri W2',
+    'Mon W3','Tue W3','Thu W3','Fri W3',
+    'Mon W4','Tue W4','Thu W4','Fri W4',
+  ];
+  const grid = document.getElementById('checkGrid');
+  const stored = JSON.parse(localStorage.getItem('caliChecks') || '{}');
+  sessions.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'check-item' + (stored[i] ? ' done' : '');
+    div.innerHTML = `<div class="check-box">${stored[i] ? '✓' : ''}</div>${s}`;
+    div.addEventListener('click', () => {
+      stored[i] = !stored[i];
+      div.classList.toggle('done', stored[i]);
+      div.querySelector('.check-box').textContent = stored[i] ? '✓' : '';
+      try { localStorage.setItem('caliChecks', JSON.stringify(stored)); } catch(e){}
+    });
+    grid.appendChild(div);
+  });
+</script>
+
+<script>
+  // EXERCISE GIF MAPPING (Wikimedia Commons — short looping demos)
+  const gifMap = {
+    // Push variants
+    'push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pushups.gif',
+    'standard push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pushups.gif',
+    'wide push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pushups.gif',
+    'diamond push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Gastpushups.gif',
+    'pike push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Liegestuetz02%20ani%20fcm.gif',
+    'archer push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pushups.gif',
+    'deficit push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pushups.gif',
+    'pseudo planche push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pushups.gif',
+    'handstand push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Push%20Ups%20GIF%20Animation%20Loop.gif',
+    'one-arm push-up negatives': 'https://commons.wikimedia.org/wiki/Special:FilePath/Onearmpullup.gif',
+    'ring push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pushups.gif',
+    'deep dips': 'https://commons.wikimedia.org/wiki/Special:FilePath/Gastpushups.gif',
+    'dips': 'https://commons.wikimedia.org/wiki/Special:FilePath/Gastpushups.gif',
+    'bar dips': 'https://commons.wikimedia.org/wiki/Special:FilePath/Gastpushups.gif',
+    'ring dips': 'https://commons.wikimedia.org/wiki/Special:FilePath/Gastpushups.gif',
+    'chair dips': 'https://commons.wikimedia.org/wiki/Special:FilePath/Gastpushups.gif',
+
+    // Pull variants
+    'pull-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
+    'chin-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
+    'weighted pull-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Weighted,%20wide-grip%20pullup%20video.gif',
+    'l-sit pull-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
+    'narrow grip chin-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
+    'typewriter pull-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
+    'one-arm negative pull-up': 'https://commons.wikimedia.org/wiki/Special:FilePath/Onearmpullup.gif',
+    'muscle-up attempts': 'https://commons.wikimedia.org/wiki/Special:FilePath/Muscle-up.gif',
+    'muscle-up': 'https://commons.wikimedia.org/wiki/Special:FilePath/Muscle-up.gif',
+    'explosive pull-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
+    'inverted rows': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
+    'scapular rows': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
+    'partner towel rows': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
+    'face pulls': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
+    'tuck front lever rows': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
+
+    // Core
+    'hollow body hold': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
+    'hollow body': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
+    'hollow body → arch rock': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
+    'l-sit': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
+    'l-sit hold': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
+    'dragon flags': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
+    'dragon flag negatives': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
+    'partner leg throws': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
+    'dead bug': 'https://commons.wikimedia.org/wiki/Special:FilePath/Situps.gif',
+    'plank shoulder taps': 'https://commons.wikimedia.org/wiki/Special:FilePath/Situps.gif',
+    'hanging knee raises': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
+    'hanging windshield wipers': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
+
+    // Skill / Isometric
+    'wall handstand hold': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
+    'kick-up practice': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
+    'freestanding kick-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
+    'planche lean': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
+    'tuck planche hold': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
+    'advanced tuck planche': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
+    'tuck front lever': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
+    'front lever': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
+    'human flag': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
+
+    // Warm-up / Mobility
+    'arm circles': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
+    'shoulder rolls': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
+    'wrist circles': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
+    'scapular push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pushups.gif',
+    'dead hangs': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
+    'band pull-aparts': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
+
+    // Burpees / Full body
+    'burpees': 'https://commons.wikimedia.org/wiki/Special:FilePath/Burpees.gif',
+  };
+
+  function normalizeName(name) {
+    return name.toLowerCase().replace(/[()]/g, '').replace(/\s+/g, ' ').trim();
+  }
+
+  function findGifUrl(name) {
+    const key = normalizeName(name);
+    if (gifMap[key]) return gifMap[key];
+    for (const [k, url] of Object.entries(gifMap)) {
+      if (key.includes(k) || k.includes(key)) return url;
+    }
+    return null;
+  }
+
+  const modal = document.getElementById('gifModal');
+  const gifImg = document.getElementById('gifImg');
+  const gifCaption = document.getElementById('gifCaption');
+  const gifError = document.getElementById('gifError');
+
+  function openGifModal(name) {
+    const url = findGifUrl(name);
+    gifImg.style.display = 'block';
+    gifError.style.display = 'none';
+    if (!url) {
+      gifImg.style.display = 'none';
+      gifError.style.display = 'block';
+    } else {
+      gifImg.src = url;
+    }
+    gifCaption.textContent = name;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeGifModal(e) {
+    if (e && e.target !== modal && e.target.closest('.gif-close') === null) return;
+    modal.classList.remove('active');
+    gifImg.src = '';
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('active')) closeGifModal();
+  });
+
+  // Attach click handlers to all exercise names
+  document.querySelectorAll('.ex-name').forEach(el => {
+    const name = el.textContent.trim();
+    if (findGifUrl(name)) {
+      el.addEventListener('click', () => openGifModal(name));
+    }
+  });
+</script>
+
+</body>
+</html>
