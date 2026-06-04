@@ -990,91 +990,99 @@
 </script>
 
 <script>
-  // EXERCISE GIF MAPPING (Wikimedia Commons — short looping demos)
+  // EXERCISE GIF MAPPING — verified, exercise-specific demos.
+  // Source 1 (EXDB): ExerciseDB anatomical GIFs served from the jsDelivr CDN — reliable hotlinking.
+  // Source 2 (Tenor CDN): hand-checked real demos for the two moves ExerciseDB lacks.
+  const EXDB = 'https://cdn.jsdelivr.net/gh/JahelCuadrado/ExerciseGymGifsDB@v1.1.0/';
+  const HOLLOW_GIF = 'https://media.tenor.com/q7r6mjrFVh0AAAAM/hand-raised-balance.gif';
+  const DRAGON_GIF = 'https://media.tenor.com/mP2CSRrrTGcAAAAM/bruce-lee-dragon-flag.gif';
+
   const gifMap = {
-    // Push variants
-    'push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pushups.gif',
-    'standard push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pushups.gif',
-    'wide push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pushups.gif',
-    'diamond push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Gastpushups.gif',
-    'pike push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Liegestuetz02%20ani%20fcm.gif',
-    'archer push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pushups.gif',
-    'deficit push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pushups.gif',
-    'pseudo planche push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pushups.gif',
-    'handstand push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Push%20Ups%20GIF%20Animation%20Loop.gif',
-    'one-arm push-up negatives': 'https://commons.wikimedia.org/wiki/Special:FilePath/Onearmpullup.gif',
-    'ring push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pushups.gif',
-    'deep dips': 'https://commons.wikimedia.org/wiki/Special:FilePath/Gastpushups.gif',
-    'dips': 'https://commons.wikimedia.org/wiki/Special:FilePath/Gastpushups.gif',
-    'bar dips': 'https://commons.wikimedia.org/wiki/Special:FilePath/Gastpushups.gif',
-    'ring dips': 'https://commons.wikimedia.org/wiki/Special:FilePath/Gastpushups.gif',
-    'chair dips': 'https://commons.wikimedia.org/wiki/Special:FilePath/Gastpushups.gif',
+    // ---- Push ----
+    'push-ups': EXDB + 'pectorals/push-up.gif',
+    'standard push-ups': EXDB + 'pectorals/push-up.gif',
+    'wide push-ups': EXDB + 'pectorals/wide-hand-push-up.gif',
+    'diamond push-ups': EXDB + 'triceps/diamond-push-up.gif',
+    'pike push-ups': EXDB + 'pectorals/exercise-ball-pike-push-up.gif',
+    'pike push-ups elevated feet': EXDB + 'pectorals/exercise-ball-pike-push-up.gif',
+    'archer push-ups': EXDB + 'pectorals/archer-push-up.gif',
+    'deficit push-ups': EXDB + 'pectorals/deep-push-up.gif',
+    'pseudo planche push-ups': EXDB + 'pectorals/full-planche-push-up.gif',
+    'handstand push-ups': EXDB + 'triceps/handstand-push-up.gif',
+    'handstand push-ups wall': EXDB + 'triceps/handstand-push-up.gif',
+    'one-arm push-up negatives': EXDB + 'pectorals/single-arm-push-up.gif',
+    'ring push-ups': EXDB + 'pectorals/suspended-push-up.gif',
+    'ring push-ups deep dips': EXDB + 'pectorals/suspended-push-up.gif',
+    'scapular push-ups': EXDB + 'serratus-anterior/scapula-push-up.gif',
+    'dips': EXDB + 'pectorals/chest-dip.gif',
+    'deep dips': EXDB + 'pectorals/chest-dip.gif',
+    'bar dips': EXDB + 'pectorals/chest-dip.gif',
+    'ring dips': EXDB + 'triceps/ring-dips.gif',
+    'chair dips': EXDB + 'triceps/bench-dip-on-floor.gif',
+    'ring dips chair dips': EXDB + 'triceps/ring-dips.gif',
 
-    // Pull variants
-    'pull-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
-    'chin-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
-    'weighted pull-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Weighted,%20wide-grip%20pullup%20video.gif',
-    'l-sit pull-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
-    'narrow grip chin-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
-    'typewriter pull-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
-    'one-arm negative pull-up': 'https://commons.wikimedia.org/wiki/Special:FilePath/Onearmpullup.gif',
-    'muscle-up attempts': 'https://commons.wikimedia.org/wiki/Special:FilePath/Muscle-up.gif',
-    'muscle-up': 'https://commons.wikimedia.org/wiki/Special:FilePath/Muscle-up.gif',
-    'explosive pull-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
-    'inverted rows': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
-    'scapular rows': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
-    'partner towel rows': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
-    'face pulls': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
-    'tuck front lever rows': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
+    // ---- Pull ----
+    'pull-ups': EXDB + 'lats/pull-up.gif',
+    'chin-ups': EXDB + 'lats/chin-up.gif',
+    'weighted pull-ups': EXDB + 'lats/weighted-pull-up.gif',
+    'l-sit pull-ups': EXDB + 'lats/l-pull-up.gif',
+    'narrow grip chin-ups': EXDB + 'lats/close-grip-chin-up.gif',
+    'typewriter pull-ups': EXDB + 'lats/wide-grip-pull-up.gif',
+    'one-arm negative pull-up': EXDB + 'lats/one-arm-chin-up.gif',
+    'explosive pull-ups': EXDB + 'lats/pull-up.gif',
+    'muscle-up attempts': EXDB + 'lats/muscle-up.gif',
+    'muscle-up': EXDB + 'lats/muscle-up.gif',
+    'inverted rows': EXDB + 'upper-back/inverted-row.gif',
+    'scapular rows': EXDB + 'upper-back/inverted-row.gif',
+    'partner towel rows': EXDB + 'upper-back/bodyweight-squatting-row-with-towel.gif',
+    'face pulls': EXDB + 'delts/cable-rear-delt-row-with-rope.gif',
+    'tuck front lever rows': EXDB + 'upper-back/front-lever-reps.gif',
 
-    // Core
-    'hollow body hold': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
-    'hollow body': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
-    'hollow body → arch rock': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
-    'l-sit': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
-    'l-sit hold': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
-    'dragon flags': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
-    'dragon flag negatives': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
-    'partner leg throws': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
-    'dead bug': 'https://commons.wikimedia.org/wiki/Special:FilePath/Situps.gif',
-    'plank shoulder taps': 'https://commons.wikimedia.org/wiki/Special:FilePath/Situps.gif',
-    'hanging knee raises': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
-    'hanging windshield wipers': 'https://commons.wikimedia.org/wiki/Special:FilePath/Legraises.gif',
+    // ---- Core ----
+    'hollow body hold': HOLLOW_GIF,
+    'hollow body': HOLLOW_GIF,
+    'hollow body arch rock': HOLLOW_GIF,
+    'l-sit': EXDB + 'abs/l-sit-on-floor.gif',
+    'l-sit hold': EXDB + 'abs/l-sit-on-floor.gif',
+    'dragon flags': DRAGON_GIF,
+    'dragon flag': DRAGON_GIF,
+    'dragon flag negatives': DRAGON_GIF,
+    'partner leg throws': EXDB + 'abs/assisted-lying-leg-raise-with-throw-down.gif',
+    'dead bug': EXDB + 'abs/dead-bug.gif',
+    'plank shoulder taps': EXDB + 'abs/kneeling-plank-tap-shoulder-male.gif',
+    'hanging knee raises': EXDB + 'abs/hanging-leg-raise.gif',
+    'hanging windshield wipers': EXDB + 'abs/hanging-straight-twisting-leg-hip-raise.gif',
 
-    // Skill / Isometric
-    'wall handstand hold': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
-    'kick-up practice': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
-    'freestanding kick-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
-    'planche lean': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
-    'tuck planche hold': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
-    'advanced tuck planche': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
-    'tuck front lever': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
-    'front lever': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
-    'human flag': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
-
-    // Warm-up / Mobility
-    'arm circles': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
-    'shoulder rolls': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
-    'wrist circles': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
-    'scapular push-ups': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pushups.gif',
-    'dead hangs': 'https://commons.wikimedia.org/wiki/Special:FilePath/Pullup.gif',
-    'band pull-aparts': 'https://commons.wikimedia.org/wiki/Special:FilePath/Man%20Doing%20Warm%20Up%20Exercise%20GIF%20Animation%20Loop.gif',
-
-    // Burpees / Full body
-    'burpees': 'https://commons.wikimedia.org/wiki/Special:FilePath/Burpees.gif',
+    // ---- Skill / Isometric ----
+    'wall handstand hold': EXDB + 'triceps/handstand.gif',
+    'wall handstand': EXDB + 'triceps/handstand.gif',
+    'freestanding handstand': EXDB + 'triceps/handstand.gif',
+    'kick-up practice': EXDB + 'triceps/handstand.gif',
+    'freestanding kick-ups': EXDB + 'triceps/handstand.gif',
+    'handstand': EXDB + 'triceps/handstand.gif',
+    'planche lean': EXDB + 'abs/lean-planche.gif',
+    'tuck planche hold': EXDB + 'abs/frog-planche.gif',
+    'tuck planche': EXDB + 'abs/frog-planche.gif',
+    'advanced tuck planche': EXDB + 'abs/full-planche.gif',
+    'tuck front lever': EXDB + 'abs/front-lever.gif',
+    'front lever': EXDB + 'abs/front-lever.gif',
+    'human flag': EXDB + 'abs/flag.gif',
   };
 
   function normalizeName(name) {
-    return name.toLowerCase().replace(/[()]/g, '').replace(/\s+/g, ' ').trim();
+    return name.toLowerCase().replace(/[(),/→+]/g, ' ').replace(/\s+/g, ' ').trim();
   }
 
+  // Exact match first; otherwise the LONGEST gifMap key contained in the name wins
+  // (most-specific match), so variants like "Pull-ups (overhand)" still resolve correctly.
   function findGifUrl(name) {
     const key = normalizeName(name);
     if (gifMap[key]) return gifMap[key];
-    for (const [k, url] of Object.entries(gifMap)) {
-      if (key.includes(k) || k.includes(key)) return url;
+    let best = null, bestLen = -1;
+    for (const k in gifMap) {
+      if (k.length > bestLen && key.includes(k)) { best = gifMap[k]; bestLen = k.length; }
     }
-    return null;
+    return best;
   }
 
   const modal = document.getElementById('gifModal');
