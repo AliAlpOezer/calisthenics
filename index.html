@@ -1359,18 +1359,35 @@
 
     if (info.state === 'future') {
       const daysUntil = Math.round((info.start - todayLocal()) / 86400000);
-      panel.innerHTML = `
-        <div class="start-screen">
-          <h3>Starts in ${daysUntil} Day${daysUntil !== 1 ? 's' : ''}</h3>
-          <p>Your program begins on ${fmtDate(info.start)}. Come back then to see your first workout.</p>
-          <div class="start-row">
-            <button class="btn-ghost" id="btnChangeDate">Change Start Date</button>
-          </div>
-        </div>`;
-      document.getElementById('btnChangeDate').addEventListener('click', function () {
+      const banner = document.createElement('div');
+      banner.className = 'program-banner';
+      banner.innerHTML = `
+        <div>
+          <div class="program-banner-week">STARTS IN ${daysUntil} DAY${daysUntil !== 1 ? 'S' : ''} &nbsp;·&nbsp; WEEK 1</div>
+          <div class="program-banner-date">Kick-off: ${fmtDate(info.start)}</div>
+        </div>
+        <button class="btn-ghost" id="btnReset">Change Start Date</button>`;
+      panel.appendChild(banner);
+      document.getElementById('btnReset').addEventListener('click', function () {
         localStorage.removeItem('caliStartDate');
         render();
       });
+      const grid = document.createElement('div');
+      grid.className = 'days-grid';
+      grid.innerHTML = `
+        <div class="day-card">
+          <div class="day-header">
+            <span class="day-name">ALL SET</span>
+            <span class="day-focus focus-rest">Pre-Program</span>
+          </div>
+          <div class="rest-day">
+            <p>Your program kicks off on <strong style="color:var(--text)">${fmtDate(info.start)}</strong>. Come back that day to see your Week 1 workout.</p>
+            <div class="tip-box" style="margin-top:12px">
+              <strong>Until then:</strong> Focus on mobility, get good sleep, and stay hydrated. Browse the weekly tabs to preview what's coming.
+            </div>
+          </div>
+        </div>`;
+      panel.appendChild(grid);
       return;
     }
 
