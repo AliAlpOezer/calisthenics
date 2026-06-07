@@ -504,6 +504,108 @@
     padding: 20px;
   }
 
+  /* TODAY PANEL */
+  .program-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: rgba(232,255,60,0.05);
+    border: 1px solid rgba(232,255,60,0.18);
+    border-radius: 2px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .program-banner-week {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+  }
+  .program-banner-date { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    padding: 6px 14px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .btn-ghost:hover { border-color: var(--accent2); color: var(--accent2); }
+  .start-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 64px 32px;
+    text-align: center;
+    gap: 12px;
+  }
+  .start-screen h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 1px;
+  }
+  .start-screen p { color: var(--muted); font-size: 14px; max-width: 360px; line-height: 1.6; }
+  .start-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  input[type=date].date-input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 10px 14px;
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+    color-scheme: dark;
+  }
+  input[type=date].date-input:focus { border-color: var(--accent); }
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    padding: 10px 28px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: opacity 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { opacity: 0.85; }
+  .complete-screen {
+    text-align: center;
+    padding: 64px 32px;
+  }
+  .complete-screen h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--accent);
+    letter-spacing: 2px;
+  }
+  .complete-screen p {
+    color: var(--muted);
+    margin-top: 12px;
+    font-size: 14px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+  }
+
 </style>
 </head>
 <body>
@@ -1116,13 +1218,183 @@
     if (e.key === 'Escape' && modal.classList.contains('active')) closeGifModal();
   });
 
-  // Attach click handlers to all exercise names
-  document.querySelectorAll('.ex-name').forEach(el => {
-    const name = el.textContent.trim();
-    if (findGifUrl(name)) {
-      el.addEventListener('click', () => openGifModal(name));
+  function _attachGifHandlers(root) {
+    (root || document).querySelectorAll('.ex-name').forEach(el => {
+      if (el._gif) return;
+      el._gif = true;
+      const name = el.textContent.trim();
+      if (findGifUrl(name)) {
+        el.addEventListener('click', () => openGifModal(name));
+      }
+    });
+  }
+  window._attachGifHandlers = _attachGifHandlers;
+  _attachGifHandlers();
+</script>
+
+
+<script>
+// TODAY PANEL — dynamic rendering based on program start date
+(function () {
+  const MONTHS = ['January','February','March','April','May','June','July',
+                  'August','September','October','November','December'];
+  const DOW = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const REST_DAYS = new Set([0, 3, 6]); // Sun, Wed, Sat
+
+  // Maps week number + day-of-week → CSS selector for the source day card in existing panels
+  const CARD_MAP = {
+    1: { 1: '#panel-1 .days-grid .day-card:nth-child(1)',   // Mon → Week 1 Push
+         2: '#panel-1 .days-grid .day-card:nth-child(2)',   // Tue → Week 1 Pull
+         4: '#panel-1 .days-grid .day-card:nth-child(4)',   // Thu → Week 1 Full
+         5: '#panel-1 .days-grid .day-card:nth-child(5)' }, // Fri → Week 1 Skill
+    2: { 1: '#panel-2 .days-grid .day-card:nth-child(1)',   // Mon → Week 2 Push
+         2: '#panel-2 .days-grid .day-card:nth-child(2)',   // Tue → Week 2 Pull
+         4: '#panel-2 .days-grid .day-card:nth-child(3)',   // Thu → Week 2 AMRAP
+         5: '#panel-2 .days-grid .day-card:nth-child(4)' }, // Fri → Week 2 Skill
+    3: { 1: '#panel-3 .days-grid .day-card:nth-child(1)',   // Mon → Push Goal
+         2: '#panel-3 .days-grid .day-card:nth-child(2)',   // Tue → Pull Goal
+         4: '#panel-3 .days-grid .day-card:nth-child(3)',   // Thu → Skill Goal
+         5: '#panel-3 .days-grid .day-card:nth-child(4)' }, // Fri → Partner Challenge
+  };
+  CARD_MAP[4] = CARD_MAP[3];
+
+  function fmtDate(d) {
+    return DOW[d.getDay()] + ', ' + MONTHS[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+  }
+
+  function todayLocal() {
+    const d = new Date();
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  }
+
+  function todayIso() {
+    const d = todayLocal();
+    return d.getFullYear() + '-' +
+      String(d.getMonth() + 1).padStart(2, '0') + '-' +
+      String(d.getDate()).padStart(2, '0');
+  }
+
+  function getInfo() {
+    const s = localStorage.getItem('caliStartDate');
+    if (!s) return { state: 'unset' };
+    const start = new Date(s + 'T00:00:00');
+    const t = todayLocal();
+    const days = Math.round((t - start) / 86400000);
+    if (days < 0) return { state: 'future', start };
+    const wk = Math.floor(days / 7) + 1;
+    if (wk > 4) return { state: 'complete' };
+    return { state: 'active', wk, dow: t.getDay(), date: t };
+  }
+
+  function render() {
+    const info = getInfo();
+    const panel = document.getElementById('panel-0');
+    panel.innerHTML = '';
+
+    if (info.state === 'unset') {
+      panel.innerHTML = `
+        <div class="start-screen">
+          <h3>Start Your Program</h3>
+          <p>Pick a start date — Monday works best. We'll show you the right workout every day automatically.</p>
+          <div class="start-row">
+            <input type="date" class="date-input" id="startDatePicker" value="${todayIso()}" />
+            <button class="btn-primary" id="btnBegin">BEGIN</button>
+          </div>
+        </div>`;
+      document.getElementById('btnBegin').addEventListener('click', function () {
+        const v = document.getElementById('startDatePicker').value;
+        if (v) { localStorage.setItem('caliStartDate', v); render(); }
+      });
+      return;
     }
-  });
+
+    if (info.state === 'future') {
+      const daysUntil = Math.round((info.start - todayLocal()) / 86400000);
+      panel.innerHTML = `
+        <div class="start-screen">
+          <h3>Starts in ${daysUntil} Day${daysUntil !== 1 ? 's' : ''}</h3>
+          <p>Your program begins on ${fmtDate(info.start)}. Come back then to see your first workout.</p>
+          <div class="start-row">
+            <button class="btn-ghost" id="btnChangeDate">Change Start Date</button>
+          </div>
+        </div>`;
+      document.getElementById('btnChangeDate').addEventListener('click', function () {
+        localStorage.removeItem('caliStartDate');
+        render();
+      });
+      return;
+    }
+
+    if (info.state === 'complete') {
+      panel.innerHTML = `
+        <div class="complete-screen">
+          <h3>Program Complete!</h3>
+          <p>You finished all 4 weeks. Take a rest day, then restart to run it again or design your next block.</p>
+          <div style="margin-top:24px">
+            <button class="btn-primary" id="btnRestart">RESTART PROGRAM</button>
+          </div>
+        </div>`;
+      document.getElementById('btnRestart').addEventListener('click', function () {
+        localStorage.removeItem('caliStartDate');
+        render();
+      });
+      return;
+    }
+
+    // Active program — render banner + workout
+    const { wk, dow, date } = info;
+    const isRest = REST_DAYS.has(dow);
+    const sessionLabel = isRest ? 'Rest Day' : DOW[dow] + ' — Training Day';
+
+    const banner = document.createElement('div');
+    banner.className = 'program-banner';
+    banner.innerHTML = `
+      <div>
+        <div class="program-banner-week">WEEK ${wk} OF 4 &nbsp;·&nbsp; ${sessionLabel.toUpperCase()}</div>
+        <div class="program-banner-date">${fmtDate(date)}</div>
+      </div>
+      <button class="btn-ghost" id="btnReset">Reset Start Date</button>`;
+    panel.appendChild(banner);
+    document.getElementById('btnReset').addEventListener('click', function () {
+      if (confirm('Reset the program start date?')) {
+        localStorage.removeItem('caliStartDate');
+        render();
+      }
+    });
+
+    const grid = document.createElement('div');
+    grid.className = 'days-grid';
+    panel.appendChild(grid);
+
+    if (isRest) {
+      grid.innerHTML = `
+        <div class="day-card">
+          <div class="day-header">
+            <span class="day-name">${DOW[dow].toUpperCase()}</span>
+            <span class="day-focus focus-rest">Rest / Mobility</span>
+          </div>
+          <div class="rest-day">
+            <p>Active recovery. 20–30 min light walking or mobility work.</p>
+            <div class="tip-box" style="margin-top:12px">
+              <strong>Do:</strong> Thoracic rotations, wrist mobility, dead hangs (no pull effort), foam roll lats and chest.
+            </div>
+          </div>
+        </div>`;
+    } else {
+      const selector = (CARD_MAP[wk] || {})[dow];
+      if (selector) {
+        const src = document.querySelector(selector);
+        if (src) {
+          const clone = src.cloneNode(true);
+          grid.appendChild(clone);
+          if (window._attachGifHandlers) window._attachGifHandlers(grid);
+        }
+      }
+    }
+  }
+
+  render();
+})();
 </script>
 
 </body>
