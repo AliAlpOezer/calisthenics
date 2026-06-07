@@ -1283,132 +1283,100 @@
 
 
 <script>
-// TODAY PANEL — dynamic rendering based on program start date
+// TODAY PANEL — program start date is fixed: June 8, 2026
 (function () {
+  const PROGRAM_START = new Date(2026, 5, 8); // June 8, 2026
   const MONTHS = ['January','February','March','April','May','June','July',
                   'August','September','October','November','December'];
   const DOW = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const REST_DAYS = new Set([0, 3, 6]); // Sun, Wed, Sat
 
-  // Maps week number + day-of-week → CSS selector for the source day card in existing panels
   const CARD_MAP = {
-    1: { 1: '#panel-1 .days-grid .day-card:nth-child(1)',   // Mon → Week 1 Push
-         2: '#panel-1 .days-grid .day-card:nth-child(2)',   // Tue → Week 1 Pull
-         4: '#panel-1 .days-grid .day-card:nth-child(4)',   // Thu → Week 1 Full
-         5: '#panel-1 .days-grid .day-card:nth-child(5)' }, // Fri → Week 1 Skill
-    2: { 1: '#panel-2 .days-grid .day-card:nth-child(1)',   // Mon → Week 2 Push
-         2: '#panel-2 .days-grid .day-card:nth-child(2)',   // Tue → Week 2 Pull
-         4: '#panel-2 .days-grid .day-card:nth-child(3)',   // Thu → Week 2 AMRAP
-         5: '#panel-2 .days-grid .day-card:nth-child(4)' }, // Fri → Week 2 Skill
-    3: { 1: '#panel-3 .days-grid .day-card:nth-child(1)',   // Mon → Push Goal
-         2: '#panel-3 .days-grid .day-card:nth-child(2)',   // Tue → Pull Goal
-         4: '#panel-3 .days-grid .day-card:nth-child(3)',   // Thu → Skill Goal
-         5: '#panel-3 .days-grid .day-card:nth-child(4)' }, // Fri → Partner Challenge
+    1: { 1: '#panel-1 .days-grid .day-card:nth-child(1)',
+         2: '#panel-1 .days-grid .day-card:nth-child(2)',
+         4: '#panel-1 .days-grid .day-card:nth-child(4)',
+         5: '#panel-1 .days-grid .day-card:nth-child(5)' },
+    2: { 1: '#panel-2 .days-grid .day-card:nth-child(1)',
+         2: '#panel-2 .days-grid .day-card:nth-child(2)',
+         4: '#panel-2 .days-grid .day-card:nth-child(3)',
+         5: '#panel-2 .days-grid .day-card:nth-child(4)' },
+    3: { 1: '#panel-3 .days-grid .day-card:nth-child(1)',
+         2: '#panel-3 .days-grid .day-card:nth-child(2)',
+         4: '#panel-3 .days-grid .day-card:nth-child(3)',
+         5: '#panel-3 .days-grid .day-card:nth-child(4)' },
   };
   CARD_MAP[4] = CARD_MAP[3];
-
-  function fmtDate(d) {
-    return DOW[d.getDay()] + ', ' + MONTHS[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
-  }
 
   function todayLocal() {
     const d = new Date();
     return new Date(d.getFullYear(), d.getMonth(), d.getDate());
   }
 
-  function todayIso() {
-    const d = todayLocal();
-    return d.getFullYear() + '-' +
-      String(d.getMonth() + 1).padStart(2, '0') + '-' +
-      String(d.getDate()).padStart(2, '0');
-  }
-
-  function getInfo() {
-    const s = localStorage.getItem('caliStartDate');
-    if (!s) return { state: 'unset' };
-    const start = new Date(s + 'T00:00:00');
-    const t = todayLocal();
-    const days = Math.round((t - start) / 86400000);
-    if (days < 0) return { state: 'future', start };
-    const wk = Math.floor(days / 7) + 1;
-    if (wk > 4) return { state: 'complete' };
-    return { state: 'active', wk, dow: t.getDay(), date: t };
+  function fmtDate(d) {
+    return DOW[d.getDay()] + ', ' + MONTHS[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
   }
 
   function render() {
-    const info = getInfo();
     const panel = document.getElementById('panel-0');
     panel.innerHTML = '';
 
-    if (info.state === 'unset') {
-      panel.innerHTML = `
-        <div class="start-screen">
-          <h3>Start Your Program</h3>
-          <p>Pick a start date — Monday works best. We'll show you the right workout every day automatically.</p>
-          <div class="start-row">
-            <input type="date" class="date-input" id="startDatePicker" value="${todayIso()}" />
-            <button class="btn-primary" id="btnBegin">BEGIN</button>
-          </div>
-        </div>`;
-      document.getElementById('btnBegin').addEventListener('click', function () {
-        const v = document.getElementById('startDatePicker').value;
-        if (v) { localStorage.setItem('caliStartDate', v); render(); }
-      });
-      return;
-    }
+    const today = todayLocal();
+    const daysSince = Math.floor((today - PROGRAM_START) / 86400000);
+    const dow = today.getDay();
 
-    if (info.state === 'future') {
-      const daysUntil = Math.round((info.start - todayLocal()) / 86400000);
-      const banner = document.createElement('div');
-      banner.className = 'program-banner';
-      banner.innerHTML = `
-        <div>
-          <div class="program-banner-week">STARTS IN ${daysUntil} DAY${daysUntil !== 1 ? 'S' : ''} &nbsp;·&nbsp; WEEK 1</div>
-          <div class="program-banner-date">Kick-off: ${fmtDate(info.start)}</div>
-        </div>
-        <button class="btn-ghost" id="btnReset">Change Start Date</button>`;
-      panel.appendChild(banner);
-      document.getElementById('btnReset').addEventListener('click', function () {
-        localStorage.removeItem('caliStartDate');
-        render();
-      });
-      const grid = document.createElement('div');
-      grid.className = 'days-grid';
-      grid.innerHTML = `
-        <div class="day-card">
-          <div class="day-header">
-            <span class="day-name">ALL SET</span>
-            <span class="day-focus focus-rest">Pre-Program</span>
+    // Before program starts
+    if (daysSince < 0) {
+      const daysUntil = -daysSince;
+      panel.innerHTML = `
+        <div class="program-banner">
+          <div>
+            <div class="program-banner-week">STARTS IN ${daysUntil} DAY${daysUntil !== 1 ? 'S' : ''} &nbsp;·&nbsp; WEEK 1</div>
+            <div class="program-banner-date">Kick-off: Monday, June 8, 2026</div>
           </div>
-          <div class="rest-day">
-            <p>Your program kicks off on <strong style="color:var(--text)">${fmtDate(info.start)}</strong>. Come back that day to see your Week 1 workout.</p>
-            <div class="tip-box" style="margin-top:12px">
-              <strong>Until then:</strong> Focus on mobility, get good sleep, and stay hydrated. Browse the weekly tabs to preview what's coming.
+        </div>
+        <div class="days-grid">
+          <div class="day-card">
+            <div class="day-header">
+              <span class="day-name">READY</span>
+              <span class="day-focus focus-rest">Pre-Program</span>
+            </div>
+            <div class="rest-day">
+              <p>Program begins Monday June 8. Browse the weekly tabs to preview your workouts.</p>
+              <div class="tip-box" style="margin-top:12px">
+                <strong>Until then:</strong> Focus on mobility, get good sleep, and stay hydrated.
+              </div>
             </div>
           </div>
         </div>`;
-      panel.appendChild(grid);
       return;
     }
 
-    if (info.state === 'complete') {
+    const wk = Math.floor(daysSince / 7) + 1;
+
+    // After week 4
+    if (wk > 4) {
       panel.innerHTML = `
-        <div class="complete-screen">
-          <h3>Program Complete!</h3>
-          <p>You finished all 4 weeks. Take a rest day, then restart to run it again or design your next block.</p>
-          <div style="margin-top:24px">
-            <button class="btn-primary" id="btnRestart">RESTART PROGRAM</button>
+        <div class="program-banner">
+          <div>
+            <div class="program-banner-week">PROGRAM COMPLETE</div>
+            <div class="program-banner-date">${fmtDate(today)}</div>
+          </div>
+        </div>
+        <div class="days-grid">
+          <div class="day-card">
+            <div class="day-header">
+              <span class="day-name">DONE</span>
+              <span class="day-focus focus-skill">4 Weeks Complete</span>
+            </div>
+            <div class="rest-day">
+              <p>You finished all 4 weeks. Check the Tracker tab to log your final results.</p>
+            </div>
           </div>
         </div>`;
-      document.getElementById('btnRestart').addEventListener('click', function () {
-        localStorage.removeItem('caliStartDate');
-        render();
-      });
       return;
     }
 
-    // Active program — render banner + workout
-    const { wk, dow, date } = info;
+    // Active program
     const isRest = REST_DAYS.has(dow);
     const sessionLabel = isRest ? 'Rest Day' : DOW[dow] + ' — Training Day';
 
@@ -1417,16 +1385,9 @@
     banner.innerHTML = `
       <div>
         <div class="program-banner-week">WEEK ${wk} OF 4 &nbsp;·&nbsp; ${sessionLabel.toUpperCase()}</div>
-        <div class="program-banner-date">${fmtDate(date)}</div>
-      </div>
-      <button class="btn-ghost" id="btnReset">Reset Start Date</button>`;
+        <div class="program-banner-date">${fmtDate(today)}</div>
+      </div>`;
     panel.appendChild(banner);
-    document.getElementById('btnReset').addEventListener('click', function () {
-      if (confirm('Reset the program start date?')) {
-        localStorage.removeItem('caliStartDate');
-        render();
-      }
-    });
 
     const grid = document.createElement('div');
     grid.className = 'days-grid';
